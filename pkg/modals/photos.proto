@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package modals;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+option (gogoproto.equal_all) = true;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.populate_all) = true;
+option (gogoproto.testgen_all) = true;
+
+message Photos {
+    repeated Photo photos = 1;
+}
+
+message Photo {
+    string filename = 1;
+    bool copied = 2;
+}
