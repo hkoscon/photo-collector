@@ -6,7 +6,7 @@
   name = "github.com/boombuler/barcode"
   packages = [
     ".",
-    "codabar",
+    "code93",
     "qr",
     "utils"
   ]
@@ -49,6 +49,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "be7ea7f887ebb9b6803a73c8710f8d6bc8415033b75d5755a4feb9dc25e26fff"
+  inputs-digest = "1f12cc1c98b3d6a4e0190353e7d8e53ad1cccf7943b1037913e205a7f87bbdc6"
   solver-name = "gps-cdcl"
   solver-version = 1
