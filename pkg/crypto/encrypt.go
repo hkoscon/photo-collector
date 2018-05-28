@@ -41,5 +41,5 @@ func (c *RSACrypt) Encrypt(data []byte) ([]byte, error) {
 	if c.publicKey == nil {
 		c.loadPublicKey()
 	}
-	return rsa.EncryptOAEP(sha256.New(), rand.Reader, c.publicKey, data, c.keyLabel)
+	return rsa.EncryptOAEP(sha256.New(), rand.Reader, c.publicKey, data, c.KeyLabel)
 }

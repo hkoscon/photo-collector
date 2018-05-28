@@ -8,7 +8,7 @@ import (
 
 func TestCrypt_loadKey(t *testing.T) {
 	crypt := &RSACrypt{
-		KeyPath: "pri_test.pem",
+		PriKeyPath: "pri_test.pem",
 	}
 
 	crypt.loadKey([]byte("1234"))

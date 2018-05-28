@@ -11,7 +11,7 @@ type Decryptor interface {
 }
 
 func (c *RSACrypt) loadKey(password []byte) {
-	keyBlocks, err := ioutil.ReadFile(c.KeyPath)
+	keyBlocks, err := ioutil.ReadFile(c.PriKeyPath)
 	if err != nil {
 		panic(err)
 	}
