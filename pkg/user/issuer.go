@@ -1,13 +1,12 @@
 package user
 
 import (
+	"bytes"
 	"encoding/base64"
-	"image/png"
-	"os"
-
 	"github.com/boombuler/barcode/qr"
 	"hkoscon.org/photos/pkg/crypto"
 	"hkoscon.org/photos/pkg/modals"
+	"image/png"
 )
 
 type Issuer struct {
@@ -29,12 +28,13 @@ func (i *Issuer) IssueCode(name string) (_ []byte, err error) {
 		return
 	}
 
-	dst := make([]byte, base64.StdEncoding.EncodedLen(len(code)))
-	base64.StdEncoding.Encode(dst, code)
+	dst := make([]byte, base64.RawStdEncoding.EncodedLen(len(code)))
+	base64.RawStdEncoding.Encode(dst, code)
+
 	return dst, nil
 }
 
-func (i *Issuer) Generate2DBarcode(name, filename string) (err error) {
+func (i *Issuer) Generate2DBarcode(name string) (_ []byte, err error) {
 	code, err := i.IssueCode(name)
 
 	img, err := qr.Encode(string(code), qr.M, qr.Auto)
@@ -42,11 +42,11 @@ func (i *Issuer) Generate2DBarcode(name, filename string) (err error) {
 		return
 	}
 
-	output, err := os.Create(filename)
-	if err != nil {
-		return
-	}
-	defer output.Close()
+	var buffer bytes.Buffer
 
-	return png.Encode(output, img)
+	if err := png.Encode(&buffer, img); err != nil {
+		return nil, err
+	}
+
+	return buffer.Bytes(), nil
 }
