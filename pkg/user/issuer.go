@@ -10,7 +10,7 @@ import (
 )
 
 type Issuer struct {
-	Encryptor crypto.Encrpytor `inject:"crypt"`
+	Encryptor crypto.Encrpytor `inject:"encryptor"`
 }
 
 func (i *Issuer) IssueCode(name string) (_ []byte, err error) {
