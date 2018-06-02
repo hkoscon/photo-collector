@@ -17,7 +17,6 @@ type sendObject struct {
 
 type Sender struct {
 	Client *minio.Client
-	Bucket string
 	Logger logrus.FieldLogger
 }
 
