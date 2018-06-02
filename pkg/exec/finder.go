@@ -62,6 +62,16 @@ func (f *Finder) ScanSDCard(sdCard string) (_ []sendObject, _ meta.Recorder, err
 		if recorder.Copied(relativePath) {
 			continue
 		}
+
+		stat, err := os.Stat(file)
+		if err != nil {
+			return
+		}
+
+		if stat.Mode().Perm()&0222 != 0 {
+			continue
+		}
+
 		result = append(result, sendObject{
 			fullPath: file,
 			rootPath: sdCard,
