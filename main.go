@@ -2,20 +2,14 @@ package main
 
 import (
 	"bufio"
-	"fmt"
-	"log"
 	"os"
-	"syscall"
 
 	"github.com/minio/minio-go"
 	"github.com/sirupsen/logrus"
-	"golang.org/x/crypto/ssh/terminal"
-	"hkoscon.org/photos/pkg/crypto"
 	"hkoscon.org/photos/pkg/exec"
-	"hkoscon.org/photos/pkg/user"
 )
 
-func execLoop(validator *user.Validator, logger logrus.FieldLogger) {
+func execLoop(logger logrus.FieldLogger) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	client, err := minio.New(os.Getenv("S3_ENDPOINT"), os.Getenv("S3_ACCESS_KEY_ID"), os.Getenv("S3_SECRET_ACCESS_KEY"), false)
@@ -39,13 +33,7 @@ func execLoop(validator *user.Validator, logger logrus.FieldLogger) {
 			continue
 		}
 
-		name, err := validator.GetName(content)
-		if err != nil {
-			logger.Error(err)
-			continue
-		}
-
-		if err := processor.Process(name); err != nil {
+		if err := processor.Process(content); err != nil {
 			logger.Error(err)
 			continue
 		}
@@ -56,23 +44,6 @@ func execLoop(validator *user.Validator, logger logrus.FieldLogger) {
 
 func main() {
 	logger := logrus.New()
-	fmt.Print("Password: ")
-	password, err := terminal.ReadPassword(int(syscall.Stdin))
-	if err != nil {
-		panic(err)
-	}
-
-	cryptor := &crypto.RSACrypt{
-		PriKeyPath: os.Getenv("PRIVATE_KEY_PATH"),
-		KeyLabel:   []byte(os.Getenv("KEY_LABEL")),
-		Logger:     logger.WithField("source", "crypto"),
-	}
-
-	cryptor.LoadKey(password)
-
-	validator := &user.Validator{
-		Decryptor: cryptor,
-	}
-
-	execLoop(validator)
+	logger.Infoln("Start service")
+	execLoop(logger.WithField("source", "loop"))
 }
