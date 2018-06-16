@@ -34,7 +34,7 @@ func (f *Finder) ScanSDCard(sdCard string) (_ []sendObject, _ meta.Recorder, err
 		f.Logger.Infof("Meta file not found in %s", sdCard)
 		if err := f.touchMetaFile(sdCard); err != nil {
 			f.Logger.Error(err)
-			return
+			return nil, nil, err
 		}
 	}
 
@@ -65,7 +65,7 @@ func (f *Finder) ScanSDCard(sdCard string) (_ []sendObject, _ meta.Recorder, err
 
 		stat, err := os.Stat(file)
 		if err != nil {
-			return
+			return nil, nil, err
 		}
 
 		if stat.Mode().Perm()&0222 != 0 {
